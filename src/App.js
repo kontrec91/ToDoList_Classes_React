@@ -1,50 +1,42 @@
 import "./App.css";
 import "./css/style.css";
-// import React, { Component } from "react";
 import React from "react";
 
-import { InputGoal } from "./components/InputGoal.js"
-import store from "./components/StoreClass.js";
+import { ToDoContext } from "./components/CreateContextApp";
 
+import ToDoPage from "./components/ToDoPage";
 
-// class Test extends React.Component {
-//   // name = null;
-//   // constructor(name){
-//   //   super()
-//   //   this.name = name;
-//   //   console.log(this.name);
-//   // }
+export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      todosArray: [],
+      filterType: "All",
+      isAllCompleted: false,
+    };
+  }
 
-//   render() {
-//     console.log(this.props);
-//     return <h1> Hello {this.props.name}</h1>;
-//   }
-// }
+  static contextType = ToDoContext;
 
-function App() {
-  return (
-    <>
-    {/* <div className="App"> */}
-      {/* <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-          Learn React
-        </a>
-        <Test name="Peter" />
-      </header> */}
-    {/* </div> */}
+  setContext = (value) => {//в value должен приходить объект с названием поля и значением, которым мы хотим переприсвоить
+    this.setState({
+      ...value
+    });
+  };
 
-    {/* <InputGoal onKeyPress={}/> */}
-    <InputGoal />
-    {/* <InputGoal onKeyPress={InputGoal.addData(store)}/> */}
-
-    </>
-
-    
-  );
+  render() {
+    return (
+      <section className="dotoApp">
+        <ToDoContext.Provider
+          value={{
+            context: this.state,
+            setContext: this.setContext,
+          }}
+        >
+          <ToDoPage />
+        </ToDoContext.Provider>
+      </section>
+    );
+  }
 }
-
-export default App;
+// App.contextType = ToDoContext;
